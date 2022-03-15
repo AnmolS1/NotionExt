@@ -1,6 +1,6 @@
 import { Client } from '@notionhq/client';
 
-const notion = new Client ({ auth: 'secret_IpXpX3dD1VxFhU2N905NYQDTulsD2yUWElV3gBugyPA' });
+const notion = new Client ({ auth: process.env.NOTION_KEY });
 
 function replace (text, r, i) {
 	while (text.includes(r))
