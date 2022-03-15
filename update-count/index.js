@@ -1,0 +1,63 @@
+import { Client } from '@notionhq/client';
+
+const notion = new Client ({ auth: 'secret_IpXpX3dD1VxFhU2N905NYQDTulsD2yUWElV3gBugyPA' });
+
+function replace (text, r, i) {
+	while (text.includes(r))
+		text = text.substring(0, text.indexOf(r)) + i + text.substring(text.indexOf(r) + 1);
+	return text;
+}
+
+(async () => {
+	const page_id = '36e5d723692842e992b463ab46d6260a';
+	const page_children = await notion.blocks.children.list ({ block_id: page_id });
+	console.log (page_children);
+	const blocks = page_children.results;
+	var total_poems = 0;
+	for (var i = 4; i < blocks.length - 2; i++) {
+		var database_id = blocks[i].id, start_cursor = '';
+		
+		while (true) {
+			var response = await notion.databases.query ({
+				database_id: database_id,
+				start_cursor: start_cursor ? start_cursor : undefined
+			});
+			console.log (response);
+			total_poems += response.results.length;
+			
+			if (response.has_more) {
+				start_cursor = response.next_cursor;
+			} else {
+				break;
+			}
+		}
+	}
+	
+	await notion.blocks.delete ({
+		block_id: blocks[blocks.length - 1].id
+	});
+	
+	await notion.blocks.children.append ({
+		block_id: page_id,
+		children: [{
+			object: 'block',
+			type: 'quote',
+			quote: {
+				rich_text: [{
+					type: 'text',
+					text: { content: total_poems + ' poems', link: null },
+					annotations: {
+						bold: false,
+						italic: false,
+						strikethrough: false,
+						underline: false,
+						code: false,
+						color: 'default'
+					},
+					plain_text: total_poems + ' poems',
+					href: null
+				}]
+			}
+		}]
+	});
+})();
