@@ -12,12 +12,14 @@ function sleep (ms) {
 }
 
 function replace (text, r, i) {
-	return text.substring(0, text.indexOf(r)) + i + text.substring(text.indexOf(r) + 1);
+	while (text.includes(r))
+		text = text.substring(0, text.indexOf(r)) + i + text.substring(text.indexOf(r) + 1);
+	return text;
 }
 
 function fix_text (text) {
-	while (text.includes ('ß')) text = replace (text, 'ß', 'fl');
-	while (text.includes ('Þ')) text = replace (text, 'Þ', 'fi');
+	text = replace (text, 'ß', 'fl');
+	text = replace (text, 'Þ', 'fi');
 	
 	return text;
 }
