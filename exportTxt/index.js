@@ -4,7 +4,8 @@ import exec from 'child_process';
 
 function replace_all (text, r, i) {
     while (text.includes(r)) {
-        text = text.substring(0, r) + i + text.substring(r + 1);
+        var r_in = text.indexOf(r);
+        text = text.substring(0, r_in) + i + text.substring(r_in + 1);
     }
     return text;
 }
@@ -22,8 +23,8 @@ const notion = new Client ({ auth: process.env.NOTION_KEY });
         ]
     });
 
-    var poem_name = process.argv.slice(2).join(' ');
-    poem_name = replace_all (poem_name, '\'', '’');
+    var file_name = process.argv.slice(2).join(' ');
+    var poem_name = replace_all (file_name, '\'', '’');
     const pages = response.results;
 
     for (var i = 0; i < pages.length; i++) {
@@ -33,7 +34,7 @@ const notion = new Client ({ auth: process.env.NOTION_KEY });
             });
 
             var content = poem_name + '\n\n';
-            const file_name = poem_name + '.txt';
+            file_name = file_name + '.txt';
             const lines = poem_content.results;
             
             for (var j = 0; j < lines.length; j++) {
@@ -44,17 +45,7 @@ const notion = new Client ({ auth: process.env.NOTION_KEY });
                 if (err) return console.log (err);
             });
 
-            exec.exec ('mv ' + file_name + ' ~/Desktop/other/art/poems/' + file_name, (error, stdout, stderr) => {
-                if (error) {
-                    console.log (`error: ${error.message}`);
-                    return;
-                }
-                if (stderr) {
-                    console.log (`stderr: ${stderr}`);
-                    return;
-                }
-            });
-
+            process.stdout.write (file_name);
             break;
         }
     }
