@@ -1,0 +1,10 @@
+{
+	"name": "calendarTool",
+	"type": "module",
+	"version": "1.0.0",
+	"description": "",
+	"dependencies": {
+		"@notionhq/client": "^1.0.1",
+		"run-applescript": "^6.0.0"
+	}
+}

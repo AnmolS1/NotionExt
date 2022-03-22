@@ -1,3 +1,4 @@
+// poem-movement
 import { Client } from '@notionhq/client';
 import fs from 'fs';
 
@@ -65,7 +66,7 @@ const notion = new Client ({ auth: process.env.NOTION_KEY });
 				
 				const response = notion.pages.create ({
 					parent: {
-						database_id: '9df1310243d147d7bb5faed409fc7352'
+						database_id: process.env.MAIN_POEM_DB
 					},
 					properties: {
 						Name: {

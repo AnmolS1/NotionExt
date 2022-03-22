@@ -1,3 +1,4 @@
+// cleanUp
 import { Client } from '@notionhq/client';
 
 function format_string (text) {
@@ -27,7 +28,7 @@ function fix_text (text) {
 const notion = new Client ({ auth: process.env.NOTION_KEY });
 
 (async () => {
-	var databaseId = '9df1310243d147d7bb5faed409fc7352';
+	var databaseId = process.env.MAIN_POEM_DB;
 	var start_cursor = '', total_count = 0;
 	
 	while (true) {

@@ -1,3 +1,4 @@
+// updateCount
 import { Client } from '@notionhq/client';
 
 const notion = new Client ({ auth: process.env.NOTION_KEY });
@@ -9,9 +10,9 @@ function replace (text, r, i) {
 }
 
 (async () => {
-	const page_id = '36e5d723692842e992b463ab46d6260a';
+	const page_id = process.env.MAH_POEMS_PAGE;
 	const page_children = await notion.blocks.children.list ({ block_id: page_id });
-	console.log (page_children);
+	
 	const blocks = page_children.results;
 	var total_poems = 0;
 	for (var i = 4; i < blocks.length - 2; i++) {
@@ -22,7 +23,7 @@ function replace (text, r, i) {
 				database_id: database_id,
 				start_cursor: start_cursor ? start_cursor : undefined
 			});
-			console.log (response);
+			
 			total_poems += response.results.length;
 			
 			if (response.has_more) {
