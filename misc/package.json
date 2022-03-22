@@ -1,0 +1,9 @@
+{
+    "name": "misc",
+    "type": "module",
+    "version": "1.0.0",
+    "description": "",
+    "dependencies": {
+        "@notionhq/client": "^1.0.1"
+    }
+}
