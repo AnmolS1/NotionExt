@@ -19,7 +19,7 @@ const notion = new Client ({ auth: process.env.NOTION_KEY });
         sorts: [
             {
                 property: 'Created',
-                direction: 'ascending'
+                direction: 'descending'
             }
         ]
     });
@@ -37,30 +37,10 @@ const notion = new Client ({ auth: process.env.NOTION_KEY });
             var content = poem_name + '\n\n';
             file_name = file_name + '.txt';
             const lines = poem_content.results;
-            var preview = '';
             
-            for (var j = 0; j < lines.length; j++) {
-            	preview += lines[j].paragraph.rich_text[0].plain_text + ' ';
-                content += lines[j].paragraph.rich_text[0].plain_text + (j != lines.length - 1 ? '\n' : '');
-            }
-            preview = ((preview.length < 68) ? preview.trim() : preview.trim().substring(0, 67)) + '...';
-            
-            await notion.pages.update ({
-            	page_id: pages[i].id,
-            	properties: {
-					Preview: {
-						rich_text: [{
-							text: {
-								content: preview
-							},
-							annotations: {
-								code: true,
-								color: 'default'
-							}
-						}]
-					}
-				}
-            });
+            for (var j = 0; j < lines.length; j++)
+				if (lines[j].paragraph.rich_text.length > 0)
+                	content += lines[j].paragraph.rich_text[0].plain_text + (j != lines.length - 1 ? '\n' : '');
             
             fs.writeFile (file_name, content, function (err) {
                 if (err) return console.log (err);
